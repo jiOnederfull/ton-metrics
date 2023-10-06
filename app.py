@@ -1,6 +1,7 @@
 from flask import Flask, render_template
-from web3 import Web3
 from config import Config
+
+import requests
 
 app = Flask(__name__)
 
@@ -11,7 +12,11 @@ config = Config()
 endpoint = config.ENDPOINT
 flask_port = config.FLASK_PORT
 
-w3 = Web3(Web3.HTTPProvider(endpoint))
+url = 'http://localhost/getMasterchainInfo'
+headers = {'accept': 'application/json'}
+
+response = requests.get(url, headers=headers)
+
 
 @app.route('/')
 def hello_world():
@@ -20,8 +25,12 @@ def hello_world():
 
 @app.route('/metrics')
 def metrics():
-    block_number = w3.eth.block_number
-    return f"chain_head_block {block_number}"
+    if response.status_code == 200:
+        data = response.json()
+        block_number = data['result']['last']['seqno']
+        return f"chain_head_block {block_number}"
+    else:
+        return f'Error: Status code {response.status_code}'
 
 
 if __name__ == '__main__':
