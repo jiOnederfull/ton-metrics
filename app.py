@@ -12,7 +12,8 @@ config = Config()
 endpoint = config.ENDPOINT
 flask_port = config.FLASK_PORT
 
-url = 'http://localhost/getMasterchainInfo'
+#url = 'http://localhost/getMasterchainInfo'
+url = endpoint+"/getMasterchainInfo"
 headers = {'accept': 'application/json'}
 
 response = requests.get(url, headers=headers)
@@ -20,7 +21,7 @@ response = requests.get(url, headers=headers)
 
 @app.route('/')
 def hello_world():
-    return 'This is metrics page of Base.'
+    return 'This is metrics page of TON.'
 
 
 @app.route('/metrics')
