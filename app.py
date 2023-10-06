@@ -16,7 +16,6 @@ flask_port = config.FLASK_PORT
 url = endpoint+"/getMasterchainInfo"
 headers = {'accept': 'application/json'}
 
-response = requests.get(url, headers=headers)
 
 
 @app.route('/')
@@ -26,6 +25,7 @@ def hello_world():
 
 @app.route('/metrics')
 def metrics():
+    response = requests.get(url, headers=headers)
     if response.status_code == 200:
         data = response.json()
         block_number = data['result']['last']['seqno']
